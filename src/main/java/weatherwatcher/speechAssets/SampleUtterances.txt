@@ -1,0 +1,11 @@
+DialogWeatherIntent open weather watcher
+DialogWeatherIntent {City}
+
+OneShotWeatherIntent get current weather for {City}
+OneShotWeatherIntent get the current weather for {City}
+OneShotWeatherIntent get weather information for {City}
+OneShotWeatherIntent get weather information for {City} city
+OneShotWeatherIntent weather information for {City}
+OneShotWeatherIntent what is the current weather in {City}
+OneShotWeatherIntent how is the current weather in {City}
+OneShotWeatherIntent how is the weather in {City}
