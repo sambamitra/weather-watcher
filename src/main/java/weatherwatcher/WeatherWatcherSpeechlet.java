@@ -36,6 +36,7 @@ import com.amazonaws.util.json.JSONTokener;
  * <ul>
  * <li><b>Web service</b>: communicate with an external web service to get
  * weather data from OpenWeatherMap API (http://openweathermap.org/api)</li>
+ * <li><b>SSML</b>: Using SSML tags to control how Alexa renders the text-to-speech</li>
  * <p>
  * - Dialog and Session state: Handles two models, both a one-shot ask and tell
  * model, and a multi-turn dialog model. If the user provides an incorrect slot
