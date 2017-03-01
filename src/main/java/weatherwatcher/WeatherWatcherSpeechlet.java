@@ -36,7 +36,8 @@ import com.amazonaws.util.json.JSONTokener;
  * <ul>
  * <li><b>Web service</b>: communicate with an external web service to get
  * weather data from OpenWeatherMap API (http://openweathermap.org/api)</li>
- * <li><b>SSML</b>: Using SSML tags to control how Alexa renders the text-to-speech</li>
+ * <li><b>SSML</b>: Using SSML tags to control how Alexa renders the
+ * text-to-speech</li>
  * <p>
  * - Dialog and Session state: Handles two models, both a one-shot ask and tell
  * model, and a multi-turn dialog model. If the user provides an incorrect slot
@@ -67,6 +68,7 @@ public class WeatherWatcherSpeechlet implements Speechlet {
 
 	// Configuration properties - to be initialized in a static block below
 	private static final Properties CONFIG_PROPERTIES;
+	private static final Properties WEATHER_CONDITIONS_PROPERTIES;
 
 	// Intents
 	private static final String ONE_SHOT_WEATHER_INTENT = "OneShotWeatherIntent";
@@ -84,9 +86,9 @@ public class WeatherWatcherSpeechlet implements Speechlet {
 
 	// Configuration file
 	private static final String CONFIG_FILE_NAME = "configuration.properties";
+	private static final String WEATHER_CONDITIONS_FILE_NAME = "weather_conditions.properties";
 
 	// Configuration file entries below help construct the REST endpoint
-	// for the medical record management service
 	private static final String SERVICE_ENDPOINT = "serviceEndpoint";
 	private static final String CONTEXT_PATH_WEATHER = "contextPathWeather";
 	private static final String CONTEXT_PATH_FORECAST = "contextPathForecast";
@@ -99,9 +101,22 @@ public class WeatherWatcherSpeechlet implements Speechlet {
 	static {
 		InputStream is = null;
 		CONFIG_PROPERTIES = new Properties();
+		WEATHER_CONDITIONS_PROPERTIES = new Properties();
 		try {
 			is = WeatherWatcherSpeechlet.class.getClassLoader().getResourceAsStream(CONFIG_FILE_NAME);
 			CONFIG_PROPERTIES.load(is);
+		} catch (IOException e) {
+			log.error("Cannot load properties: " + e.getLocalizedMessage());
+		} finally {
+			try {
+				is.close();
+			} catch (IOException e) {
+				log.error("Cannot close stream: " + e.getLocalizedMessage());
+			}
+		}
+		try {
+			is = WeatherWatcherSpeechlet.class.getClassLoader().getResourceAsStream(WEATHER_CONDITIONS_FILE_NAME);
+			WEATHER_CONDITIONS_PROPERTIES.load(is);
 		} catch (IOException e) {
 			log.error("Cannot load properties: " + e.getLocalizedMessage());
 		} finally {
@@ -122,6 +137,11 @@ public class WeatherWatcherSpeechlet implements Speechlet {
 	}
 
 	@Override
+	public void onSessionEnded(final SessionEndedRequest request, final Session session) throws SpeechletException {
+		log.info("onSessionEnded requestId=" + request.getRequestId() + ", sessionId=" + session.getSessionId());
+	}
+
+	@Override
 	public SpeechletResponse onLaunch(final LaunchRequest request, final Session session) throws SpeechletException {
 		log.info("onLaunch requestId=" + request.getRequestId() + ", sessionId=" + session.getSessionId());
 		return getWelcomeResponse();
@@ -136,7 +156,7 @@ public class WeatherWatcherSpeechlet implements Speechlet {
 
 		switch (intentName) {
 		case ONE_SHOT_WEATHER_INTENT:
-			return handleWeatherRequest(intent, session);
+			return handleOneShotWeatherRequest(intent, session);
 		case DIALOG_WEATHER_INTENT:
 			Slot citySlot = intent.getSlot(CITY_SLOT);
 			if (citySlot != null && citySlot.getValue() != null) {
@@ -164,11 +184,6 @@ public class WeatherWatcherSpeechlet implements Speechlet {
 
 		return callWeatherApi(city, false);
 
-	}
-
-	@Override
-	public void onSessionEnded(final SessionEndedRequest request, final Session session) throws SpeechletException {
-		log.info("onSessionEnded requestId=" + request.getRequestId() + ", sessionId=" + session.getSessionId());
 	}
 
 	// Handlers
@@ -245,7 +260,7 @@ public class WeatherWatcherSpeechlet implements Speechlet {
 	 * Newcastle upon Tyne'. If there is an error in a slot, this will guide the
 	 * user to the dialog approach.
 	 */
-	private SpeechletResponse handleWeatherRequest(final Intent intent, final Session session) {
+	private SpeechletResponse handleOneShotWeatherRequest(final Intent intent, final Session session) {
 		// Get the city from intent
 		final String city = intent.getSlot(CITY_SLOT).getValue();
 		return callWeatherApi(city, false);
@@ -330,15 +345,17 @@ public class WeatherWatcherSpeechlet implements Speechlet {
 			try {
 				JSONObject openWeatherMapResponseObject = new JSONObject(new JSONTokener(builder.toString()));
 				if (openWeatherMapResponseObject != null) {
-					final JSONObject mainWeather = openWeatherMapResponseObject.getJSONObject("main");
-					final double temp = mainWeather.getDouble("temp");
-					final double temp_min = mainWeather.getDouble("temp_min");
-					final double temp_max = mainWeather.getDouble("temp_max");
+					final JSONObject tempPressure = openWeatherMapResponseObject.getJSONObject("main");
+					final double temp = tempPressure.getDouble("temp");
+					final double temp_min = tempPressure.getDouble("temp_min");
+					final double temp_max = tempPressure.getDouble("temp_max");
 
-					speechOutput = new StringBuilder().append("The current temperature in ").append(city).append(" is ")
-							.append(temp).append(" degree celsius. Today's maximum temperature is ").append(temp_max)
-							.append(" degree celsius, and minimum temperature is ").append(temp_min)
-							.append(" degree celsius.").toString();
+					final JSONObject weather = openWeatherMapResponseObject.getJSONObject("weather");
+					final String weatherDesc = weather.getString("description");
+
+					speechOutput = new StringBuilder().append("Currently there is ").append(weatherDesc).append(" in ")
+							.append(city).append("The current temperature is ").append(temp).append(" degree celsius.")
+							.toString();
 				}
 			} catch (JSONException e) {
 				log.error("Exception occoured while parsing service response.", e);
