@@ -1,5 +1,5 @@
-#Sample AWS Lambda function for Alexa
-A simple [AWS Lambda](http://aws.amazon.com/lambda) function that demonstrates how to write a skill for the Amazon Echo using the Alexa SDK.
+# Alexa Weather Watcher
+A simple [AWS Lambda](http://aws.amazon.com/lambda) function that demonstrates how to write a skill for the Amazon Echo using the Alexa SDK. This Lambda function is used to power an Alexa Skill fetching the current weather of any city in the UK.
 
 ## Concepts
 This sample shows how to create a Lambda function for handling Alexa Skill requests that communicates with an external web service to get weather data from OpenWeatherMap API (http://openweathermap.org/api)
@@ -42,9 +42,13 @@ To run this example skill you need to do two things. The first is to deploy the 
 ## Examples
 ### One-shot model:
   User:  "Alexa, ask Weather Watcher what is the current weather in Newcastle upon Tyne"
+  
   Alexa: "The current temperature in Newcastle upon Tyne is 5.63 degree celsius. Today's     maximum temperature is 7.0 degree celsius, and minimum temperature is 4.0 degree celsius."
 ### Dialog model:
   User:  "Alexa, open Weather Watcher"
+  
   Alexa: "Welcome to Weather Watcher. I can provide the current weather for any city. Which city would you like current weather for?"
+  
   User:  "Newcastle upon Tyne"
+  
   Alexa: "The current temperature in Newcastle upon Tyne is 5.63 degree celsius. Today's     maximum temperature is 7.0 degree celsius, and minimum temperature is 4.0 degree celsius."
