@@ -43,7 +43,7 @@ To run this example skill you need to do two things. The first is to deploy the 
 ### One-shot model:
   User:  "Alexa, ask Weather Watcher what is the current weather in Newcastle upon Tyne"
   
-  Alexa: "The current temperature in Newcastle upon Tyne is 5.63 degree celsius. Today's     maximum temperature is 7.0 degree celsius, and minimum temperature is 4.0 degree celsius."
+  Alexa: "It is 18 degree celsius and clear sky in Newcastle upon Tyne."
 ### Dialog model:
   User:  "Alexa, open Weather Watcher"
   
@@ -51,4 +51,4 @@ To run this example skill you need to do two things. The first is to deploy the 
   
   User:  "Newcastle upon Tyne"
   
-  Alexa: "The current temperature in Newcastle upon Tyne is 5.63 degree celsius. Today's     maximum temperature is 7.0 degree celsius, and minimum temperature is 4.0 degree celsius."
+  Alexa: "It is 18 degree celsius and clear sky in Newcastle upon Tyne."
