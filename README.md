@@ -1,5 +1,14 @@
+![Weather Watcher](src/main/resources/weather_small.png)
+
 # Alexa Weather Watcher
 A simple [AWS Lambda](http://aws.amazon.com/lambda) function that demonstrates how to write a skill for the Amazon Echo using the Alexa SDK. This Lambda function is used to power an Alexa Skill fetching the current weather of any city in the UK.
+
+## Word of caution
+**⚠  USE AT YOUR OWN RISK! ⚠**
+
+This skill has been published for the educational benefit of anyone wanting to try AWS Lambda or Alexa Skills. This should not be the basis for any production applications.
+
+This project uses the OpenWeatherMap API and all weather conditions are provided by the API. Enjoy the great British summer while it lasts!
 
 ## Concepts
 This sample shows how to create a Lambda function for handling Alexa Skill requests that communicates with an external web service to get weather data from OpenWeatherMap API (http://openweathermap.org/api)
