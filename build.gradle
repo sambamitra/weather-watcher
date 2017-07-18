@@ -1,7 +1,7 @@
 apply plugin: 'java'
 
-group = "alexa-skills-kit-samples"
-version = '1.0'
+group = "com.samba.alexa"
+version = '0.1.0'
 
 compileJava {
     targetCompatibility = JavaVersion.VERSION_1_8
@@ -25,7 +25,6 @@ dependencies {
     compile 'com.amazon.alexa:alexa-skills-kit:1.1.2'
     compile 'com.amazonaws:aws-lambda-java-core:1.0.0'
     compile 'com.amazonaws:aws-java-sdk-dynamodb:1.9.40'
-
     compile 'log4j:log4j:1.2.17'
     compile 'org.apache.commons:commons-lang3:3.3.2'
     compile 'org.apache.directory.studio:org.apache.commons.io:2.4'

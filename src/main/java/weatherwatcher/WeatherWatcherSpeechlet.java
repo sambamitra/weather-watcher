@@ -8,7 +8,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Properties;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -139,7 +138,10 @@ public class WeatherWatcherSpeechlet implements Speechlet {
 		log.info("onIntent requestId=" + request.getRequestId() + ", sessionId=" + session.getSessionId());
 
 		Intent intent = request.getIntent();
-		String intentName = (intent != null) ? intent.getName() : "";
+		if (intent == null) {
+			throw new SpeechletException("Invalid Intent");
+		}
+		String intentName = intent.getName();
 
 		switch (intentName) {
 		case ONE_SHOT_WEATHER_INTENT:
